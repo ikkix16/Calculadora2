@@ -2,8 +2,11 @@ package barreras.mario.calculadora
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_main.*
+import net.objecthunter.exp4j.ExpressionBuilder
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,86 +15,115 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        val id1: Button = findViewById(R.id.id1) as  Button
-        val id2: Button = findViewById(R.id.id2) as  Button
-        val id3: Button = findViewById(R.id.id3) as  Button
-        val id4: Button = findViewById(R.id.id4) as  Button
-        val id5: Button = findViewById(R.id.id5) as  Button
-        val id6: Button = findViewById(R.id.id6) as  Button
-        val id7: Button = findViewById(R.id.id7) as  Button
-        val id8: Button = findViewById(R.id.id8) as  Button
-        val id9: Button = findViewById(R.id.id9) as  Button
-        val id0: Button = findViewById(R.id.id0) as  Button
-        val idplus: Button = findViewById(R.id.idplus) as  Button
-        val idless: Button = findViewById(R.id.idless) as  Button
-        val idx: Button = findViewById(R.id.idx) as  Button
-        val iddiv: Button = findViewById(R.id.iddiv) as  Button
-        val idResult: Button = findViewById(R.id.idResult) as  Button
-        val idClear: Button = findViewById(R.id.idClear) as  Button
+        val btn1: Button = findViewById(R.id.id1) as Button
+        val btn2: Button = findViewById(R.id.id2) as Button
+        val btn3: Button = findViewById(R.id.id3) as Button
+        val btn4: Button = findViewById(R.id.id4) as Button
+        val btn5: Button = findViewById(R.id.id5) as Button
+        val btn6: Button = findViewById(R.id.id6) as Button
+        val btn7: Button = findViewById(R.id.id7) as Button
+        val btn8: Button = findViewById(R.id.id8) as Button
+        val btn9: Button = findViewById(R.id.id9) as Button
+        val btn0: Button = findViewById(R.id.id0) as Button
+        val btnplus: Button = findViewById(R.id.idplus) as Button
+        val btnless: Button = findViewById(R.id.idless) as Button
+        val btnx: Button = findViewById(R.id.idx) as Button
+        val btndiv: Button = findViewById(R.id.iddiv) as Button
+        val btnResult: Button = findViewById(R.id.idResult) as Button
+        val btnClear: Button = findViewById(R.id.idClear) as Button
 
-        val idNumero:TextView= findViewById(R.id.idNumero) as TextView
-        val idNumero2:TextView = findViewById(R.id.idNumero2) as TextView
+        val txOperacion: TextView = findViewById(R.id.idOperacion) as TextView
+        val txResultado: TextView = findViewById(R.id.idResultado) as TextView
 
 
-        fun operacion{
 
-            idplus.setOnClickListener {
+
+
+        fun agregarExpresion(string: String, valor: Boolean) {
+            if (idResultado.text.isNotEmpty()) {
+                idOperacion.text = ""
+            }
+
+            if (valor) {
+                idResultado.text = ""
+                idOperacion.append(string)
+            } else {
+                idOperacion.append(idResultado.text)
+                idOperacion.append(string)
+                idResultado.text = ""
             }
 
         }
-        var resultado:Int=0
+
+
 
 
         //numeros
-         id1.setOnClickListener {
+        btn1.setOnClickListener{agregarExpresion("1",true)
 
-        }
+         }
 
-        id2.setOnClickListener {
-        }
-
-        id3.setOnClickListener {
+        btn2.setOnClickListener { agregarExpresion("2",true)
         }
 
-        id4.setOnClickListener {
+        btn3.setOnClickListener { agregarExpresion("3",true)
         }
-        id5.setOnClickListener {
+
+        btn4.setOnClickListener { agregarExpresion("4",true)
         }
-        id6.setOnClickListener {
+        btn5.setOnClickListener { agregarExpresion("5",true)
         }
-        id7.setOnClickListener {
+        btn6.setOnClickListener { agregarExpresion("6",true)
         }
-        id8.setOnClickListener {
+        btn7.setOnClickListener { agregarExpresion("7",true)
         }
-        id9.setOnClickListener {
+        btn8.setOnClickListener { agregarExpresion("8",true)
         }
-        id0.setOnClickListener {
+        btn9.setOnClickListener { agregarExpresion("9",true)
+        }
+        btn0.setOnClickListener { agregarExpresion("0",true)
         }
 
         //operaciones
 
 
-        idless.setOnClickListener {
+        btnless.setOnClickListener { agregarExpresion("-",false)
         }
 
-        idx.setOnClickListener {
+        btnx.setOnClickListener { agregarExpresion("*",false)
 
         }
 
-        iddiv.setOnClickListener {
+        btndiv.setOnClickListener { agregarExpresion("/",false)
+
+
         }
+        btnplus.setOnClickListener{ agregarExpresion("+",false)
 
-
+        }
 
 
         //acciones
-        idResult.setOnClickListener {
-            idNumero.setText(resultado)
-        }
+        btnResult.setOnClickListener {
+                try {
 
-        idClear.setOnClickListener {
-            idNumero.setText("")
-            idNumero2.setText("")
+                    val operacion = ExpressionBuilder(idOperacion.text.toString()).build()
+                    val resultado = operacion.evaluate()
+                    val longResult = resultado.toLong()
+                    if(resultado == longResult.toDouble())
+                        idResultado.text = longResult.toString()
+                    else
+                        idResultado.text = resultado.toString()
+
+                }catch (e:Exception){
+                    Log.d("Exception"," Mensaje : " + e.message )
+                }
+            }
+
+
+        btnClear.setOnClickListener {
+            txOperacion.setText("")
+            txResultado.setText("")
         }
 
 
